@@ -7,19 +7,20 @@ async function addItem(userCart, item) {
 async function handleQuantity(userCart, item, action) {
     const findIndex = userCart.findIndex((itemCart) => itemCart.name == item.name)
     const quantity = userCart[findIndex].quantity
-    if (action === "minus") {
+    if (action == "minus") {
         if (quantity > 0) {
             userCart[findIndex].quantity -= 1
             if (userCart[findIndex].quantity === 0) {
                 deleteItem(userCart, item.name)
             }
         }
-        return
+        return userCart
     }
     userCart[findIndex].quantity += 1
     if (userCart[findIndex].quantity === 0) {
         deleteItem(userCart, item.name)
     }
+    return userCart
 }
 
 
@@ -33,7 +34,7 @@ async function deleteItem(userCart, name) {
 
 async function calculateTotal(userCart) {
     const result = userCart.reduce((total, item) => total + item.subtotal(), 0)
-    return result
+    return result.toFixed(2)
 }
 
 
@@ -44,7 +45,7 @@ async function displayCart(userCart) {
         console.log(`${index + 1} . ${item.name} | ${item.price} | ${item.quantity} | ${item.subtotal()}`)
         subtotal += item.subtotal()
     })
-    console.log("Subtotal: ", await calculateTotal(userCart) || subtotal)
+    console.log("Subtotal: ", await calculateTotal(userCart))
 }
 
 export {
